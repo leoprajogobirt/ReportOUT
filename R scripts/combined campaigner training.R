@@ -15,7 +15,14 @@ combined_dat$session <- as.factor(combined_dat$session) #changes session data ty
 
 for (i in q_combined) {
   print (
-    ggplot(subset(combined_dat, i != "NA"), aes(x=.data[[i]], fill = session)) +
-      geom_bar()
-  )
+    combined_dat %>%
+      filter(.data[[i]] != "NA") %>%
+      ggplot(aes(x=.data[[i]], y=after_stat(count/sum(count)), fill = session)) +
+        geom_bar(position="dodge") +
+        geom_text(
+          aes(label = scales::percent(after_stat(count)/sum(after_stat(count)) ) ),
+          stat="count", position = position_dodge(width = 1.7), 
+          vjust = -1
+        )
+    )
 } # plots by rating colour coded by which session was attended

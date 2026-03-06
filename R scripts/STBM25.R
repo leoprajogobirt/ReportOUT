@@ -14,7 +14,12 @@ for (i in q_STBM25) {
 
 for (i in q_STBM25) {
   print (
-    ggplot(STBM25_dat, aes(x=factor(.data[[i]], responses_STBM25), fill = event)) +
-      geom_bar()
+    ggplot(STBM25_dat, aes(x=.data[[i]], y=after_stat(count/sum(count)))) +
+      geom_bar() +
+      geom_text(
+        aes(label = scales::percent(after_stat(count)/sum(after_stat(count)) ) ),
+        stat="count", position = position_dodge(width = 1.7), 
+        vjust = -1
+      )
   )
-} # plots by rating colour coded by which event was attended
+} # plots by rating colour coded by which session was attended

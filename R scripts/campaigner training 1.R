@@ -14,7 +14,12 @@ for (i in q_session) {
 
 for (i in q_session) {
   print (
-    ggplot(subset(session_dat, i != "NA"), aes(x=.data[[i]])) +
-      geom_bar()
+    ggplot(subset(session_dat, i != "NA"), aes(x=.data[[i]], y=after_stat(count/sum(count)), fill)) +
+      geom_bar() +
+      geom_text(
+        aes(label = scales::percent(after_stat(count)/sum(after_stat(count)) ) ),
+        stat="count", position = position_dodge(width = 1.7), 
+        vjust = -1
+      )
   )
 } # plots by rating colour coded by which session was attended
